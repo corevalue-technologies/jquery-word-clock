@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <meta charset="utf-8">
+    <title>jQuery Word Clock by vijay joshi ::: vijayjoshi.org</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+
+    <style>
+		*
+		{
+			margin:0;
+			padding:0;
+		}
+		body
+		{
+			margin:0 auto;
+			width:900px;
+			font-family:'Roboto', cursive, verdana;
+			font-size:15px;
+		}
+		.clock
+		{
+			width:100%;
+			border:1px solid #3F72D8;
+			border-radius:5px;
+			margin-top:10px;
+			padding:2px;
+			float:left;
+			text-align:center;
+			background-color:#F5F5F5;
+		}
+		span
+		{
+			padding:3px;
+			float:left;
+			color:#808080;
+		}
+		.highlight
+		{
+			color:#ff0000;
+			font-weight:bold;
+		}
+		h2
+		{
+			padding:2px;
+		}
+		p
+		{
+			float:right;
+			color:#3F72D8;
+		}
+		.note
+		{
+			font-size:12px;
+		}
+		
+		.share
+		{
+			position:fixed;
+			top:50px;
+			left:0;
+		}
+	</style>
+  <body>
+	<h2>Word Clock using jQuery </h2>(Read the text in red)
+	<div class="clock">
+		<span class="highlight">It is </span>
+		
+		<div id="weekDayDiv"></div>
+		
+		<span class="highlight">. The </span>
+		
+		<div id="dateDiv"></div>
+		
+		<span class="highlight"> day of </span>
+		
+		<div id="monthDiv"></div>
+
+		<span class="highlight">. The time at the moment is </span>
+		
+		<div id="hourDiv"></div>
+				
+		<div id="minuteDiv"></div>
+		
+		<span class="highlight" id="ampm"></span>
+
+		<span class="highlight"> and </span>
+		
+		<div id="secondsDiv"></div>
+		
+		<span class="highlight"> seconds </span>
+		
+	</div>
+	<div class="fb-comments" data-href="http://www.vijayjoshi.org/examples/jquery-word-clock.html" data-num-posts="10" data-width="800"></div>
+	
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script>
+		$(document).ready(function()
+		{
+			var dayArr = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+			var dateArr = ['First', 'Second', 'Third', 'Fourth', 'Fifth', 'Sixth', 'Seventh', 'Eighth', 'Ninth', 'Tenth', 'Eleventh', 'Twelveth', 'Thirteenth', 'Fourteenth', 'Fifteenth', 'Sixteenth', 'Seventeenth', 'Eighteenth', 'Nineteenth', 'Twenty', 'Twenty First', 'Twenty Second', 'Twenty Third', 'Twenty Fourth', 'Twenty Fifth', 'Twenty Sixth', 'Twenty Seventh', 'Twenty Eighth', 'Twenty Ninth', 'Thirtieth', 'Thirty First'];
+			var monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+			var hourArr = ['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve'];
+			var mintSecondArr = ['Zero' ,'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen', 'Twenty', 'Twenty One', 'Twenty Two', 'Twenty Three', 'Twenty Four', 'Twenty Five', 'Twenty Six', 'Twenty Seven', 'Twenty Eight', 'Twenty Nine', 'Thirty', 'Thirty One', 'Thirty Two', 'Thirty Three', 'Thirty Four', 'Thirty Five', 'Thirty Six', 'Thirty Seven', 'Thirty Eight', 'Thirty Nine', 'Fourty', 'Fourty One', 'Fourty Two', 'Fourty Three', 'Fourty Four', 'Fourty Five', 'Fourty Six', 'Fourty Seven', 'Fourty Eight', 'Fourty Nine', 'Fifty','Fifty One', 'Fifty Two', 'Fifty Three', 'Fifty Four', 'Fifty Five', 'Fifty Six', 'Fifty Seven', 'Fifty Eight', 'Fifty Nine'];
+			
+			var $weekDayDiv = $('#weekDayDiv');
+			var $dateDiv = $('#dateDiv');
+			var $monthDiv = $('#monthDiv')
+			var $hourDiv = $('#hourDiv')
+			var $minuteDiv = $('#minuteDiv');
+			var $secondsDiv = $('#secondsDiv');
+			var $ampm = $('#ampm');
+
+			var dayOfWeek, date, month, hour, minute, second, ampm;			
+			
+			var buildDom = function(div, arr)
+			{
+				var str = '';
+				$(arr).each(function(index, value)
+				{
+					str+= '<span>'+value+'</span>';
+				});				
+				div.html(str);
+			}
+
+			var showDate = function()
+			{
+				var rightNow = new Date();
+				
+				dayOfWeek = parseInt(rightNow.getDay(), 10);
+				$weekDayDiv.children().removeClass('highlight');
+				$weekDayDiv.children().eq(dayOfWeek).addClass('highlight');
+
+				date = parseInt(rightNow.getDate(), 10);
+				$dateDiv.children().removeClass('highlight');
+				$dateDiv.children().eq(date-1).addClass('highlight');
+
+				month = parseInt(rightNow.getMonth(), 10);
+				$monthDiv.children().removeClass('highlight');
+				$monthDiv.children().eq(month).addClass('highlight');
+
+				hour = parseInt(rightNow.getHours(), 10);
+				ampm = hour >= 12 ? "PM" : "AM";
+				hour = hour >12 ? hour%12 : hour;
+				$hourDiv.children().removeClass('highlight');
+				$hourDiv.children().eq(hour-1).addClass('highlight');
+				$ampm.html(ampm);
+
+				minute = parseInt(rightNow.getMinutes(), 10);
+				$minuteDiv.children().removeClass('highlight');
+				$minuteDiv.children().eq(minute).addClass('highlight');
+
+				second = parseInt(rightNow.getSeconds(), 10);
+				$secondsDiv.children().removeClass('highlight');
+				$secondsDiv.children().eq(second).addClass('highlight');
+			}
+			buildDom($weekDayDiv, dayArr);
+			buildDom($dateDiv, dateArr);
+			buildDom($monthDiv, monthArr);
+			buildDom($hourDiv, hourArr);
+			buildDom($minuteDiv, mintSecondArr);
+			buildDom($secondsDiv, mintSecondArr);					
+			setInterval(showDate, 1000);
+		});
+    </script>
+  </body>
+</html>
